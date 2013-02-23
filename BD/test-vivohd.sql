@@ -1,8 +1,10 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     22/02/2013 11:20:12 a.m.                     */
+/* Created on:     22/02/2013 08:02:15 p.m.                     */
 /*==============================================================*/
 
+
+drop trigger NUEVO_CONTRATO_CLIENTE;
 
 drop table if exists CLIENTE;
 
@@ -32,10 +34,10 @@ create table CLIENTE
    EMAIL_CLIENTE        varchar(64),
    FORMA_PAGO_CLIENTE   varchar(32) not null,
    NUMERO_CUENTA_CLIENTE varchar(32),
-   ESTADO_CLIENTE       bool not null default true,
-   NUMERO_CONTRATO_CLIENTE smallint not null default 0,
+   ESTADO_CLIENTE       bool default true,
+   NUMERO_CONTRATO_CLIENTE smallint default 0,
    NUMERO_CONTRATO_REFERIDOR_CLIENTE smallint,
-   NUMERO_REFERIDOS_CLIENTE smallint not null default 0,
+   NUMERO_REFERIDOS_CLIENTE smallint default 0,
    primary key (DUI_CLIENTE)
 );
 
@@ -97,7 +99,7 @@ create table USUARIO
    DUI_CLIENTE          char(10),
    ID_PERFIL            smallint not null,
    PASSWORD_USUARIO     varchar(64) not null,
-   ESTADO_USUARIO       bool default true,
+   ESTADO_USUARIO       bool default 1,
    primary key (ID_USUARIO)
 );
 
@@ -120,21 +122,9 @@ alter table USUARIO add constraint FK_USUARIO_TIENE_PERFIL foreign key (ID_PERFI
       references PERFIL (ID_PERFIL) on delete restrict on update restrict;
 
 
-/*==============================================================*/
-/* Trigger: aumentar-num-contrato                                               */
-/*==============================================================*/
-
-
-
-create trigger NUEVO_CONTRATO
-after insert on CONTRATO
-for each row
-update CLIENTE
-set NUMERO_CONTRATO_CLIENTE = NUMERO_CONTRATO_CLIENTE+1
-WHERE DUI_CLIENTE = new.DUI_CLIENTEcreate trigger NUEVO_CONTRATO
-after insert on CONTRATO
-for each row
-update CLIENTE
-set NUMERO_CONTRATO_CLIENTE = NUMERO_CONTRATO_CLIENTE+1
-WHERE DUI_CLIENTE = new.DUI_CLIENTE
+create trigger NUEVO_CONTRATO_CLIENTE after insert
+on CONTRATO for each row
+	update CLIENTE
+	set NUMERO_CONTRATO_CLIENTE = NUMERO_CONTRATO_CLIENTE+1
+	WHERE DUI_CLIENTE = new.DUI_CLIENTE;
 
