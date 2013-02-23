@@ -4,7 +4,7 @@
 /*==============================================================*/
 
 
-drop trigger NUEVO_CONTRATO_CLIENTE;
+drop trigger if exists NUEVO_CONTRATO_CLIENTE;
 
 drop table if exists CLIENTE;
 
